@@ -67,6 +67,32 @@ Each agent:
 
 Agents run in parallel with `&` and `wait`. File-based reports tend to be more thorough than stdout.
 
+## The prompt
+
+This is the actual prompt each agent receives:
+
+```
+QUESTION: "Your question here"
+
+You are a research agent with a SUPERPOWER: you can spawn parallel sub-agents.
+
+TO SPAWN A SUB-AGENT:
+claude -p 'QUESTION: "[sub-question]" ...' --model sonnet --output-format text --allowedTools 'Bash(claude:*)' > report.md &
+
+Key points:
+- Use & to run in background (parallel)
+- Use `wait` to collect all results before synthesizing
+- Write reports to files for comprehensive output
+
+YOUR DECISION:
+1. COMPLEX question (multiple angles needed) → spawn parallel agents, wait, synthesize
+2. ATOMIC question (you can fully answer) → answer directly
+
+Your sub-agents have the same superpower. They can spawn more if needed.
+```
+
+`--allowedTools 'Bash(claude:*)'` pre-authorizes spawning more Claude instances.
+
 ## Examples
 
 Some questions I ran through it (different models/approaches):
