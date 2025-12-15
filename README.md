@@ -1,122 +1,135 @@
-# Deep Research - Self-Spawning Agents
+# Deep Research
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-**Claude Code agents that spawn their own sub-agents.**
+**Turn any question into multi-agent exploration.**
 
 ```bash
-./deep-research.sh "Why do startups fail?"
+./deep-research.sh "Why do smart people make bad decisions?"
 ```
 
-Agent decides it needs help → spawns sub-agents → they can spawn more → results flow back up.
+One agent breaks your question into angles. Each angle gets its own researcher. Researchers can spawn more researchers. Results flow back up into a synthesis.
 
-## What happens
+---
+
+## See It In Action
 
 ```
-You: "Why do startups fail?"
-    │
-    └── Coordinator (Opus): "Multiple angles needed"
-            ├── Researcher 1 (Sonnet): founder issues
-            │       └── Sub-researcher: psychology of failure
-            ├── Researcher 2 (Sonnet): market problems
-            ├── Researcher 3 (Sonnet): financial issues
-            └── Researcher 4 (Sonnet): team dynamics
-                    │
-                    ▼
-            Synthesized report
+You ask: "Why do startups fail?"
+         │
+         ▼
+    Coordinator decides: "4 angles needed"
+         │
+         ├── Researcher 1 → Founder psychology
+         ├── Researcher 2 → Market timing
+         ├── Researcher 3 → Financial runway
+         └── Researcher 4 → Team dynamics
+                              │
+                              └── Sub-researcher → Hiring mistakes
+         │
+         ▼
+    Final synthesis combining all findings
 ```
 
-Each agent inherits "DNA" - the instruction to break down OR answer directly. Same logic at every level. Unlimited depth. It stops when questions become atomic.
+Each agent asks itself: *"Can I answer this directly, or should I break it down further?"*
 
-## Install
+Same logic at every level. Unlimited depth. Stops when questions become simple enough to answer.
+
+---
+
+## Quick Start
 
 ```bash
 git clone https://github.com/Cranot/deep-research.git
 cd deep-research
-chmod +x *.sh
+chmod +x deep-research.sh
+
+# Run it
+./deep-research.sh "Your question here"
 ```
 
-Needs [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed.
+**Requires:** [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
 
-## Use
+---
+
+## Example Reports
+
+Real outputs from actual runs:
+
+| Question | Config | Result |
+|----------|--------|--------|
+| [What makes great software architecture?](examples/software-architecture.md) | sonnet + haiku | 6 dimensions identified |
+| [What is the key to learning fast?](examples/learning-fast.md) | sonnet + haiku | 5-principle framework |
+| [Why do people self-sabotage?](examples/self-sabotage.md) | sonnet | Psychological deep-dive |
+| [What makes people buy vs just admire?](examples/buy-vs-admire.md) | opus | Purchase psychology |
+
+---
+
+## Options
 
 ```bash
-# Best quality: Opus orchestrator + Sonnet researchers (default)
-./deep-research.sh "What makes great software architecture?"
+# Default: Opus orchestrator + Sonnet researchers
+./deep-research.sh "Your question"
 
-# With web search for current information
-./deep-research.sh --web "What are the latest AI agent frameworks?"
+# Fast & cheap: Sonnet + Haiku
+./deep-research.sh -m sonnet -r haiku "Your question"
 
-# Fast & cheap: Sonnet orchestrator + Haiku researchers
-./deep-research.sh -m sonnet -r haiku "Why do startups fail?"
+# With web search (for current events)
+./deep-research.sh --web "Latest developments in AI agents"
 
-# All Opus (expensive but thorough)
-./deep-research.sh -m opus -r opus --web "Deep analysis of market trends"
+# Maximum depth: Sonnet + Sonnet (researchers can spawn more)
+./deep-research.sh -m sonnet -r sonnet "Complex topic"
 ```
 
-### Options
+| Flag | What it does | Default |
+|------|--------------|---------|
+| `-m, --model` | Orchestrator model | opus |
+| `-r, --researcher` | Researcher model | sonnet |
+| `-w, --web` | Enable web search | off |
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `-m, --model` | Orchestrator model (opus, sonnet, haiku) | opus |
-| `-r, --researcher` | Sub-agent model (opus, sonnet, haiku) | sonnet |
-| `-w, --web` | Enable web search for agents | off |
-| `-h, --help` | Show help | - |
+**Note:** Haiku researchers answer directly and won't spawn sub-researchers. Use `-r sonnet` if you want deeper recursion.
 
-Reports are saved to `reports/YYYY-MM-DD-question-slug/SYNTHESIS.md`
+---
 
-## How it works
+## Model Combinations
 
-The trick is `--allowedTools "Bash(claude:*)"` which lets spawned Claude instances spawn more instances.
+| Config | Depth | Speed | Cost | Best for |
+|--------|-------|-------|------|----------|
+| `-m opus -r sonnet` | Deep | Slow | $$$ | Best quality |
+| `-m sonnet -r sonnet` | Deep | Medium | $$ | Good balance |
+| `-m sonnet -r haiku` | Shallow | Fast | $ | Quick answers |
 
-Each agent:
-1. Gets a question + DNA (recursive spawning instructions)
-2. Asks: "Are there multiple angles worth exploring?"
-3. If YES → spawns sub-agents for each angle, waits, synthesizes
-4. If NO → answers directly
-5. Sub-agents inherit the same DNA and can spawn more
+**Cost ranges:** $0.10-0.50 (sonnet+haiku) to $1-5 (opus+sonnet) to $5-15 (opus+opus+web)
 
-The DNA biases toward exploration: "Go deep, not shallow."
+---
 
-## The DNA
+## Output
 
-This is the recursive instruction every agent inherits:
-
+Reports save automatically to:
 ```
-=== AGENT DNA (every sub-agent inherits this) ===
-Before answering, ALWAYS ask: are there multiple angles worth exploring?
-- If YES: spawn a sub-agent for each angle, wait for results, then synthesize
-- If NO: Answer directly.
-Bias toward exploring more angles. Go deep, not shallow.
-=== END DNA ===
+reports/YYYY-MM-DD-your-question-slug/SYNTHESIS.md
 ```
 
-`--allowedTools 'Bash(claude:*)'` pre-authorizes spawning more Claude instances.
+---
 
-## Examples
+## How It Works
 
-Sample reports from actual runs:
+The magic is one flag: `--allowedTools "Bash(claude:*)"`
 
-- **"What makes great software architecture?"** - Sonnet + Haiku researchers explored 6 dimensions: technical excellence, human alignment, business value, context-dependence, evolution, decision-making
-- **"How do multi-agent AI systems coordinate?"** - Opus coordinator discovered a 4-layer coordination stack (protocols → architectures → state systems → emergence)
+This lets Claude spawn more Claude instances. Each instance gets the same "DNA":
 
-Reports are saved to `reports/` folder with timestamps.
+```
+Before answering, ask: are there multiple angles worth exploring?
+- If YES → spawn sub-agents for each angle, wait, synthesize
+- If NO → answer directly
+Bias toward exploring. Go deep, not shallow.
+```
 
-## Cost
+That's it. Recursive by nature. Each agent can spawn more. The tree grows until questions become atomic.
 
-This spawns multiple Claude instances. Cost varies by model choice:
-
-| Configuration | Typical Cost | Use Case |
-|--------------|--------------|----------|
-| `-m opus -r sonnet` (default) | $1-5 | Best quality |
-| `-m sonnet -r haiku` | $0.10-0.50 | Fast & cheap |
-| `-m opus -r opus --web` | $5-15 | Deep + current info |
-
-Depends on question complexity and how deep agents decide to go.
+---
 
 ## Built by
 
-[AgentsKB](https://agentskb.com)
+[AgentsKB](https://agentskb.com) - Pre-researched knowledge for AI agents
 
 ## License
 
