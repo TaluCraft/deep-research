@@ -12,6 +12,7 @@ set -e
 ORCHESTRATOR="opus"
 RESEARCHER="sonnet"
 WEB_SEARCH=false
+MAX_CONCURRENT=10
 
 show_help() {
     cat << 'EOF'
@@ -23,6 +24,7 @@ USAGE:
 OPTIONS:
     -m, --model MODEL       Orchestrator model: opus (default), sonnet, haiku
     -r, --researcher MODEL  Sub-agent model: opus, sonnet (default), haiku
+    -c, --concurrent N      Max concurrent agents (default: 10)
     -w, --web               Enable web search for agents
     -h, --help              Show this help
 
@@ -72,6 +74,10 @@ while [[ $# -gt 0 ]]; do
             WEB_SEARCH=true
             shift
             ;;
+        -c|--concurrent)
+            MAX_CONCURRENT="$2"
+            shift 2
+            ;;
         *)
             QUESTION="$1"
             shift
@@ -85,12 +91,16 @@ fi
 
 # Build allowed tools based on flags
 if [ "$WEB_SEARCH" = true ]; then
-    TOOLS="Bash(claude:*),WebSearch,WebFetch"
-    RESEARCH_METHOD="Use WebSearch and WebFetch for current information."
+    TOOLS="Bash(./research.sh:*),WebSearch,WebFetch"
+    RESEARCH_METHOD="Use WebSearch for current information."
 else
-    TOOLS="Bash(claude:*)"
+    TOOLS="Bash(./research.sh:*)"
     RESEARCH_METHOD="Answer from your knowledge."
 fi
+
+# Export for research.sh to inherit
+export WEB_SEARCH
+export MAX_CONCURRENT
 
 # Generate folder name from question
 SLUG=$(echo "$QUESTION" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//' | cut -c1-50)
@@ -107,33 +117,33 @@ echo "=== Deep Research ===" >&2
 echo "Question: $QUESTION" >&2
 echo "Orchestrator: $ORCHESTRATOR" >&2
 echo "Researchers: $RESEARCHER" >&2
+echo "Max concurrent: $MAX_CONCURRENT" >&2
 echo "Web search: $WEB_SEARCH" >&2
 echo "Output: $OUTPUT_FILE" >&2
 echo "====================" >&2
 echo "" >&2
 
-# The prompt with recursive DNA
+# The prompt with recursive DNA (Recipe v5)
 PROMPT="QUESTION: \"$QUESTION\"
 
-You are a research agent. You can spawn sub-agents to explore deeper.
+You are the orchestrator. Break down this question, delegate to researchers, then synthesize.
 
-=== AGENT DNA (every sub-agent inherits this) ===
-Before answering, ALWAYS ask: are there multiple angles worth exploring?
-- If YES: spawn sub-agents for each angle, then synthesize their findings
-- If NO: $RESEARCH_METHOD Answer directly.
-Bias toward exploring more angles. Go deep, not shallow.
-=== END DNA ===
+TO SPAWN A RESEARCHER:
+./research.sh \"sub-question\" $RESEARCHER
 
-TO SPAWN A SUB-AGENT:
-claude -p 'QUESTION: \"[sub-question]\"
+IMPORTANT: Each ./research.sh call will BLOCK and return the researcher's findings.
+Spawn multiple researchers in ONE response to run them in parallel.
+After ALL researchers return their findings, write your synthesis.
 
-You are a research agent. Before answering, ask: are there multiple angles?
-If YES: spawn sub-agents for each. If NO: answer directly.
-$RESEARCH_METHOD' --model $RESEARCHER --output-format text --allowedTools '$TOOLS'
+$RESEARCH_METHOD
 
-Spawn one agent per angle. Collect all their findings. Then synthesize.
+Steps:
+1. List the angles this question needs explored
+2. Spawn a researcher for each angle (in one response)
+3. Read ALL their findings when they return
+4. Write a comprehensive synthesis combining all findings
 
-What angles does this question need explored?"
+Begin by identifying the angles, then spawn your researchers."
 
 # Write header
 echo "# $QUESTION" > "$OUTPUT_FILE"
